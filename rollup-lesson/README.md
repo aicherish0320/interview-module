@@ -79,3 +79,11 @@ var calculate = (function () {
 
 - webpack 功能最全，但是略显复杂和臃肿，ESM 转换成 CommonJS
 - vite 不需要打包，全是原生的 ESM 模块，不需要打包，如果要上线部署，得使用 rollup
+
+## 手写 rollup
+
+acorn -> @babel/parser
+estraverse 实现语法的编译和作用域的生成
+esprima 转 AST @babel/parser
+estraverse 遍历和转换 @babel/traverse
+escodegen 代码生成 @babel/generator
