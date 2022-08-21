@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+  <script>
+    // 执行过程：script 宏任务 -> 创建 50 li，追加到 dom 中 -> 页面渲染 -> setTimeout 宏任务
+    // requestAnimationFrame 也是一个宏任务 可以配合浏览器刷新频率
+    // 低版本浏览器不会等待 js 执行完，才把 li 插入到 dom 中，而是 appendChild 一次 渲染一次
+    // 此时就需要使用 fragment 文档碎片 就行批量追加、渲染
+    const total = 1 * 10000
+
+    let index = 50
+    let id = 0
+
+    function load() {
+      index += 50
+      if (index < total) {
+        setTimeout(() => {
+          for (let i = 0; i < index; i++) {
+            const li = document.createElement('li')
+            li.innerHTML = id++
+            container.appendChild(li)
+          }
+          load()
+        }, 0)
+      }
+    }
+
+    load()
+  </script>
+</html>

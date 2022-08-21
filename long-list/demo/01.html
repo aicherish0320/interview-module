@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+  <script>
+    const total = 1 * 10000
+    // 新版浏览器的优化，当 JS 执行完成后统一追加到 DOM 上
+    const timer = Date.now()
+    for (let i = 0; i < total; i++) {
+      const li = document.createElement('li')
+      li.innerHTML = i
+      container.appendChild(li)
+    }
+    console.log(Date.now() - timer) // JS 执行的时间
+    // 宏任务
+    setTimeout(() => {
+      console.log(Date.now() - timer) // DOM 渲染的时间
+    }, 0)
+  </script>
+</html>
