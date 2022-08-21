@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "acorn": "^8.8.0",
-    "magic-string": "^0.26.2"
+    "magic-string": "^0.26.2",
+    "rollup": "^2.78.1"
   }
 }
