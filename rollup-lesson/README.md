@@ -87,3 +87,37 @@ estraverse 实现语法的编译和作用域的生成
 esprima 转 AST @babel/parser
 estraverse 遍历和转换 @babel/traverse
 escodegen 代码生成 @babel/generator
+
+## TreeShaking
+
+```js
+// 1. 本模块从哪个模块导入了什么变量，叫什么名字
+// main.js
+import { name as n, age as a } from './msg.js'
+
+this.imports['n'] = { localName: 'n', importName: 'name', source: 'msg.js' }
+this.imports['a'] = { localName: 'a', importName: 'age', source: 'msg.js' }
+// 2. 本模块导处了什么变量
+// msg.js
+export const name = 'jack'
+export const age = 25
+this.exports['name'] = {
+  localName: 'name',
+  exportName: 'name',
+  type: 'ExportNamedDeclaration'
+}
+
+// 3. 本语句定义的变量
+var type = 'bird'
+statement._defines['type'] = true
+// 4. 本模块定义了哪些变量
+this.definitions['type'] = statement
+// 5. 使用到的变量 没有定义，就表示依赖的外部变量
+// 如果当前语句中使用到的变量没有在当前模块中定义，我们就认为它是一个外部导入的变量
+import { name, age } from './msg.js'
+console.log(name)
+statement._dependsOn['name'] = true
+```
+
+- 如何判断外部变量
+  - dependsOn 读取一个变量，但当前模块内没有声明，那它就是外部的

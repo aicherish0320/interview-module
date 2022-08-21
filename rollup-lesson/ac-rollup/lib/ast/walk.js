@@ -7,10 +7,9 @@ function visit(node, parent, enter, leave) {
     enter(node, parent)
   }
 
-  // 深度递归遍历子节点
-  let keys = Object.keys(node).filter((key) => typeof node[key] === 'object')
+  const keys = Object.keys(node).filter((key) => typeof node[key] === 'object')
   keys.forEach((key) => {
-    let children = node[key]
+    const children = node[key]
     if (Array.isArray(children)) {
       children.forEach((child) => {
         visit(child, node, enter, leave)

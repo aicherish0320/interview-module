@@ -1,2 +1,3 @@
-console.log('hello')
-console.log('World')
+import { fullName } from './msg'
+
+console.log(fullName)
