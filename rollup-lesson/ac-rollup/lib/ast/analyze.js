@@ -39,6 +39,7 @@ function analyze(ast, magicStringOfAst, module) {
             addToScope(node.id.name)
             // 如果遇到函数声明，就会产生一个新的作用域
             newScope = new Scope({
+              name: node.id.name,
               parent: scope,
               params: names
             })
@@ -63,6 +64,21 @@ function analyze(ast, magicStringOfAst, module) {
           scope = scope.parent
         }
       }
+    })
+  })
+  // 作用域链构建完成后，再遍历一次，找出本模块定义了依赖了哪些外部变量
+  ast.body.forEach((statement) => {
+    walk(statement, ast.body, {
+      enter(node) {
+        if (node.type === 'Identifier') {
+          let currentScope = node._scope || scope
+          let definingScope = currentScope.findDefiningScope(node.name)
+          if(!definingScope) {
+            statement._dependsOn[node.name] = true
+          }
+        }
+      },
+      leave(node) {}
     })
   })
 }

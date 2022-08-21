@@ -48,7 +48,7 @@ class Module {
         }
       }
     })
-
+    // 1. 构建了作用域 2. 找到了模块依赖了哪些外部变量
     analyze(this.ast, this.code, this)
   }
   expandAllStatements() {
