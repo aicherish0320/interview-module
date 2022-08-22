@@ -24,6 +24,9 @@ class HomeController extends Controller {
     ctx.body = 'success'
   }
   async uploadFileChunk() {
+    if (Math.random() > 0.3) {
+      return (this.ctx.status = 500)
+    }
     const { ctx } = this
     const file = ctx.request.files[0]
     const { hash, name } = ctx.request.body

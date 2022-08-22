@@ -42,7 +42,7 @@
 import axios from 'axios'
 import sparkMD5 from 'spark-md5'
 
-const CHUNK_SIZE = 5 * 1024 * 1024
+const CHUNK_SIZE = 0.1 * 1024 * 1024
 
 export default {
   name: 'NuxtTutorial',
@@ -229,24 +229,69 @@ export default {
           form.append('hash', chunk.hash)
           form.append('name', chunk.name)
           // form.append('index', chunk.index)
-          return { form, index: chunk.index }
+          return { form, index: chunk.index, error: 0 }
         })
-        .map(({ form, index }) => {
-          return axios.post('http://localhost:7001/uploadFileChunk', form, {
-            onUploadProgress: (progress) => {
-              this.chunks[index].progress = Number(
-                (progress.loaded / progress.total) * 100
-              )
-            },
-          })
-        })
+      // .map(({ form, index }) => {
+      //   return axios.post('http://localhost:7001/uploadFileChunk', form, {
+      //     onUploadProgress: (progress) => {
+      //       this.chunks[index].progress = Number(
+      //         (progress.loaded / progress.total) * 100
+      //       )
+      //     },
+      //   })
+      // })
       // await Promise.all(requests)
       await this.sendRequest(requests)
       // 发起合并请求
       await this.mergeRequest()
     },
-    async sendRequest(chunks, limit=4) {
+    sendRequest(chunks, limit = 4) {
+      return new Promise((resolve, reject) => {
+        const len = chunks.length
+        let count = 0
+        let isStop = false
+        const start = async () => {
+          if (isStop) {
+            return
+          }
 
+          const task = chunks.shift()
+          if (task) {
+            const { form, index } = task
+            try {
+              await axios.post('http://localhost:7001/uploadFileChunk', form, {
+                onUploadProgress: (progress) => {
+                  this.chunks[index].progress = Number(
+                    (progress.loaded / progress.total) * 100
+                  )
+                },
+              })
+              if (count === len - 1) {
+                // 最后一个任务
+                resolve()
+              } else {
+                count++
+                // 启动下一个任务
+                start()
+              }
+            } catch (error) {
+              this.chunks[index].progress = -1
+
+              if (task.error < 3) {
+                task.error++
+                chunks.unshift(task)
+                start()
+              } else {
+                isStop = true
+              }
+            }
+          }
+        }
+        while (limit > 0) {
+          start()
+          limit -= 1
+        }
+      })
     },
     async mergeRequest() {
       await axios.post('http://localhost:7001/mergeRequest', {
