@@ -35,7 +35,6 @@ function render(listener, status) {
     default:
       break
   }
-  console.log('src >>> ', src)
   listener.el.setAttribute('src', src)
 }
 function loadImage(src, resolve, reject) {
@@ -56,6 +55,7 @@ const lazy = (Vue) => {
       }
     }
     checkInView() {
+      // getBoundingClientRect()用于获得页面中某个元素的左，上，右和下分别相对浏览器视窗的位置
       const { top } = this.el.getBoundingClientRect()
       return top < window.innerHeight * this.options.preLoad
     }
@@ -82,13 +82,13 @@ const lazy = (Vue) => {
       this.listeners = []
     }
     add(el, binding) {
+       // 监控 el 是否需要显示
       const listener = new ReactiveListener({
         el,
         src: binding.value,
         options: this.options
       })
       this.listeners.push(listener)
-      // 监控 el 是否需要显示
       // 绑定滚动事件
       Vue.nextTick(() => {
         const ele = scrollParent(el)

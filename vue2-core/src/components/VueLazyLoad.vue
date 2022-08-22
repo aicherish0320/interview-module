@@ -1,9 +1,9 @@
 <template>
   <div>
     <ul class="box">
-      <li v-for="list in lists" :key="list.id">
+      <li v-for="(list, index) in lists" :key="list.id">
         <!-- <img :src="list.url" alt="img" width="100" /> -->
-        <img v-lazy="list.url" alt="img" width="200" />
+        <img v-lazy="list.url" :id="index" alt="img" width="200" />
       </li>
     </ul>
   </div>
