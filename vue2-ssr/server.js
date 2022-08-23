@@ -8,6 +8,8 @@ const static = require('koa-static')
 const app = new Koa()
 const router = new Router()
 
+app.use(static(path.resolve(__dirname, 'dist')))
+
 // const serverBundle = fs.readFileSync('./dist/ssr.bundle.js', 'utf8')
 const template = fs.readFileSync('./dist/index.ssr.html', 'utf8')
 
@@ -21,14 +23,24 @@ const render = VueServerRenderer.createBundleRenderer(serverBundle, {
 
 router.get('/', async (ctx) => {
   ctx.body = await new Promise((resolve) => {
-    render.renderToString((_, html) => {
+    render.renderToString({ url: ctx.url }, (_, html) => {
       resolve(html)
     })
   })
 })
 
-app.use(router.routes())
+router.get('(.*)', async (ctx) => {
+  ctx.body = await new Promise((resolve) => {
+    render.renderToString({ url: ctx.url }, (error, html) => {
+      if (error && error.code === '404') {
+        return resolve('Page Not Found')
+      } else {
+        return resolve(html)
+      }
+    })
+  })
+})
 
-app.use(static(path.resolve(__dirname, 'dist')))
+app.use(router.routes())
 
 app.listen(3001, () => console.log(3001))
