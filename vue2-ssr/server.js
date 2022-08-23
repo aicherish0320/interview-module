@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const VueServerRenderer = require('vue-server-renderer')
 const Koa = require('koa')
+const Vue = require('vue')
 const Router = require('@koa/router')
 const static = require('koa-static')
 
@@ -28,6 +29,28 @@ router.get('/', async (ctx) => {
     })
   })
 })
+
+// For Test
+const vm = new Vue({
+  template: `
+    <button @click="add">Add{{ count }}</button>
+  `,
+  data() {
+    return {
+      count: 1
+    }
+  },
+  methods: {
+    add() {
+      this.count++
+    }
+  },
+})
+const renderTest = VueServerRenderer.createRenderer()
+router.get('/test/render', async ctx => {
+  ctx.body = await renderTest.renderToString(vm)
+})
+// For Test
 
 router.get('(.*)', async (ctx) => {
   ctx.body = await new Promise((resolve) => {
