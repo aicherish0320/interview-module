@@ -7,7 +7,7 @@ self.onmessage = (e) => {
   let progress = 0
   let count = 0
 
-  const lodaNext = (index) => {
+  const loadNext = (index) => {
     const reader = new FileReader()
     reader.readAsArrayBuffer(chunks[index].file)
     reader.onload = (e) => {
@@ -23,9 +23,9 @@ self.onmessage = (e) => {
         self.postMessage({
           progress,
         })
-        lodaNext(count)
+        loadNext(count)
       }
     }
   }
-  lodaNext(count)
+  loadNext(count)
 }
