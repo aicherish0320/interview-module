@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pay Page</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <form onsubmit="transfer(event)">
+      <h3>用户名：<span id="u"></span></h3>
+      <h3>金额：<span id="m"></span></h3>
+
+      <div class="form-group">
+        <label for="target" class="control-label">收款人</label>
+        <input type="text" id="target" class="form-control" value="jack" />
+      </div>
+      <div class="form-group">
+        <label for="money" class="control-label">金额</label>
+        <input type="text" id="money" class="form-control" value="123" />
+      </div>
+      <div class="form-group">
+        <p id="picture"></p>
+        <label for="code" class="control-label">二维码</label>
+        <input type="text" id="code" class="form-control" value="" />
+      </div>
+      <div class="form-group">
+        <input type="submit" value="转账" class="btn btn-primary" />
+      </div>
+    </form>
+  </body>
+  <script>
+    function getUserInfo() {
+      $.get('/api/userInfo').then((res) => {
+        if (res.code === 1) {
+          location.href = '/login.html'
+        } else {
+          const { username, money } = res.user
+          $('#u').html(username)
+          $('#m').html(money)
+          $('#picture').html(res.svg)
+        }
+      })
+    }
+    getUserInfo()
+
+    function transfer(e) {
+      e.preventDefault()
+
+      const target = $('#target').val()
+      const money = $('#money').val()
+      const code = $('#code').val()
+
+      $.post('/api/transfer', { target, money, code }).then((res) => {
+        console.log('res >>> ', res)
+
+        if (res.code === 0) {
+          getUserInfo()
+        } else {
+          alert(1)
+        }
+      })
+    }
+  </script>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comment Page</title>
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="contaienr">
+      <ul class="list"></ul>
+      <form onsubmit="addComment(event)">
+        <div class="form-group">
+          <label for="content" class="control-label">内容</label>
+          <input type="text" id="content" class="form-control" value="jack" />
+        </div>
+        <div class="form-group">
+          <input type="submit" value="提交" class="btn btn-primary" />
+        </div>
+      </form>
+    </div>
+  </body>
+  <script>
+    function getLits() {
+      $.get('/api/list').then((res) => {
+        if (res.code === 0) {
+          let html = ''
+          res.comments.forEach((ele) => {
+            html += `<li>${ele.username}-${ele.content}</li>`
+          })
+          $('.list').html(html)
+        }
+      })
+    }
+    getLits()
+
+    function addComment(e) {
+      e.preventDefault()
+
+      const content = $('#content').val()
+
+      $.post('/api/addCommon', { content }).then((res) => {
+        if (res.code === 1) {
+          location.href = '/login.html'
+        } else {
+          getLits()
+        }
+      })
+    }
+  </script>
+</html>
