@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href=""> -->
+  </head>
+  <body>
+    <!-- <img src="" alt=""> -->
+  </body>
+  <!-- 
+  https://www.baidu.com/sugrec?prod=pc&from=pc_web&&wd=aa&req=2&csor=2&pwd=ab&cb=show
+-->
+  <!-- <script>
+    function show(params) {
+      console.log('params >>> ', params)
+    }
+  </script>
+  <script src="https://www.baidu.com/sugrec?prod=pc&from=pc_web&&wd=aa&req=2&csor=2&pwd=ab&cb=show"></script> -->
+
+  <script>
+    function jsonp({ url, cb }) {
+      return new Promise((resolve) => {
+        const script = document.createElement('script')
+
+        window[cb] = function (data) {
+          resolve(data)
+          document.body.removeChild(script)
+        }
+
+        script.src = `${url}&cb=${cb}`
+        document.body.appendChild(script)
+      })
+    }
+
+    jsonp({
+      url: 'http://localhost:3000/say?',
+      cb: 'show'
+    })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
+
+    // jsonp({
+    //   url: 'https://www.baidu.com/sugrec?prod=pc&from=pc_web&&wd=aa&req=2&csor=2&pwd=ab',
+    //   cb: 'show'
+    // })
+    //   .then((data) => {
+    //     console.log(data)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.message)
+    //   })
+  </script>
+</html>

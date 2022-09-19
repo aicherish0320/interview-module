@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <iframe
+      src="http://localhost:3002/c.html"
+      frameborder="2"
+      id="iframe"
+      onload="load()"
+    ></iframe>
+  </body>
+  <script>
+    let first = true
+    function load() {
+      if (first) {
+        const iframe = document.getElementById('iframe')
+        iframe.src = 'http://localhost:3001/b.html'
+        first = false
+      } else {
+        console.log(iframe.contentWindow.name)
+      }
+    }
+
+    /*
+      a和b是同域的 http://localhost:3001
+      c是独立域的 http://localhost:3002
+      a 获取 c的数据
+      a 先引用 c，c 把值放到 window.name 上，把 a 引用的地址改到 b
+    */
+  </script>
+</html>

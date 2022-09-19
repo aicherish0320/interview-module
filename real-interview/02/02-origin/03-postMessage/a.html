@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>a</title>
+  </head>
+  <body>
+    <h3>a.html</h3>
+    <iframe
+      src="http://localhost:3002/b.html"
+      frameborder="2"
+      id="frame"
+      onload="load()"
+    ></iframe>
+  </body>
+  <script>
+    function load() {
+      const frame = document.getElementById('frame')
+      frame.contentWindow.postMessage('hello', 'http://localhost:3002')
+
+      window.onmessage = function (e) {
+        console.log('e >>> ', e.data)
+      }
+    }
+  </script>
+</html>

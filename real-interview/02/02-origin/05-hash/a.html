@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <iframe src="http://localhost:3002/c.html#hello" frameborder="2"></iframe>
+  </body>
+  <script>
+    /*
+      路径后面的 hash 值，可以用来通信
+      目的：a 想访问 c
+      a 给 c 传一个 hash 值，c 收到 hash 值后，c 把 hash 值传递给 b
+      ，b 将结果放到 a 的 hash 值中
+    */
+
+    window.onhashchange = function () {
+      console.log(' >>> ', location.hash)
+    }
+  </script>
+</html>

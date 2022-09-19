@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <button @click="add">{{count}}</button>
+      <button @click="remove">remove</button>
+      <comp :count="count"></comp>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    Vue.component('comp', {
+      template: `<div>comp-{{count}}</div>`,
+      props: ['count'],
+      beforeCreate() {
+        console.log('子 beforeCreate')
+      },
+      created() {
+        console.log('子 created')
+      },
+      beforeMount() {
+        console.log('子 beforeMount')
+      },
+      mounted() {
+        console.log('子 mounted')
+      },
+      beforeUpdate() {
+        console.log('子 beforeUpdate')
+      },
+      updated() {
+        console.log('子 updated')
+      },
+      beforeDestroy() {
+        console.log('子 beforeDestroy')
+      },
+      destroyed() {
+        console.log('子 destroyed')
+      }
+    })
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          count: 1
+        }
+      },
+      methods: {
+        add() {
+          this.count++
+        },
+        remove() {
+          this.$destroy()
+        }
+      },
+      beforeCreate() {
+        console.log('父 beforeCreate')
+      },
+      created() {
+        console.log('父 created')
+      },
+      beforeMount() {
+        console.log('父 beforeMount')
+      },
+      mounted() {
+        console.log('父 mounted')
+      },
+      beforeUpdate() {
+        console.log('父 beforeUpdate')
+      },
+      updated() {
+        console.log('父 updated')
+      },
+      beforeDestroy() {
+        console.log('父 beforeDestroy')
+      },
+      destroyed() {
+        console.log('父 destroyed')
+      }
+    })
+  </script>
+  <!-- 
+  父子组件生命周期执行的顺序
+
+  父 beforeCreate
+  父 created
+  父 beforeMount
+  子 beforeCreate
+  子 created
+  子 beforeMount
+  子 mounted
+  父 mounted 
+
+  更新过程
+  父 beforeUpdate
+  子 beforeUpdate
+  子 updated
+  父 updated
+
+  移除过程
+  父 beforeDestroy
+  子 beforeDestroy
+  子 destroyed
+  父 destroyed
+--></html>

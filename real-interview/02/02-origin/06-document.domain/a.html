@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>a</title>
+  </head>
+  <body>
+    <p>a</p>
+    <iframe
+      src="http://music.aic.com:3001/b.html"
+      frameborder="2"
+      onload="load()"
+      id="frame"
+    ></iframe>
+  </body>
+  <script>
+    // 必须是一级域名和二级域名的关系
+    document.domain = 'aic.com'
+    function load() {
+      console.log(' >>> ', frame.contentWindow.b)
+    }
+  </script>
+</html>
