@@ -8,7 +8,7 @@
     <!-- VueLazyLoad -->
     <!-- <VueLazyLoad></VueLazyLoad> -->
 
-    <ac-form :model="form" :rules="rules" ref="formRef">
+    <!-- <ac-form :model="form" :rules="rules" ref="formRef">
       <ac-form-item label="用户名" prop="username">
         <ac-input v-model="form.username"></ac-input>
       </ac-form-item>
@@ -18,7 +18,9 @@
       <ac-form-item>
         <button @click="submitForm">submit</button>
       </ac-form-item>
-    </ac-form>
+    </ac-form> -->
+
+    <ClickOutside></ClickOutside>
   </div>
 </template>
 
@@ -27,14 +29,15 @@ import VueLazyLoad from './components/VueLazyLoad.vue'
 import AcForm from '@/components/ac-form/AcForm.vue'
 import AcFormItem from '@/components/ac-form/AcFormItem.vue'
 import AcInput from '@/components/ac-form/AcInput.vue'
+import ClickOutside from './components/click-outside/index.vue'
 export default {
   name: 'App',
-
   components: {
     VueLazyLoad,
     AcInput,
     AcForm,
-    AcFormItem
+    AcFormItem,
+    ClickOutside
   },
   data() {
     return {
