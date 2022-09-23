@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>异常捕获</title>
+  </head>
+  <body></body>
+  <script>
+    window.addEventListener('unhandledrejection', (e) => {
+      console.log('e1 >>> ', e.reason)
+    })
+    window.onunhandledrejection = (e) => {
+      console.log('e2 >>> ', e.reason)
+    }
+
+    // 不能捕获错误
+    window.onerror = (e) => {
+      console.log('e >>> ', e.reason)
+    }
+
+    const p = new Promise((resolve, reject) => {
+      // throw new Error('错误')
+      // resolve(1)
+
+      // 异步任务
+      setTimeout(() => {
+        throw new Error('错误')
+        resolve(1)
+      }, 1000)
+    })
+  </script>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>延迟函数</title>
+  </head>
+  <body></body>
+  <!-- <script>
+    function delay(fn, delay, context) {
+      let defaultDelay = delay || 5000
+      let ticket
+      return {
+        run(...args) {
+          ticket = setTimeout(() => {
+            fn.apply(context, args)   
+          }, defaultDelay)
+        },
+        cancel() {
+          clearInterval(ticket)
+        }
+      }
+    }
+
+    const { run } = delay(function () {
+      console.log(1)
+    }, 1000)
+
+    run()
+  </script> -->
+
+  <script>
+    function delay(fn, delay, context) {
+      let defaultDelay = delay || 5000
+
+      let ticket
+      let executed = false
+
+      return {
+        run(...args) {
+          return new Promise((resolve, reject) => {
+            if (executed === true) {
+              return
+            }
+            ticket = setTimeout(async () => {
+              try {
+                const ret = await fn.apply(context, args)
+                resolve(ret)
+              } catch (error) {
+                reject(error)
+              } finally {
+                clearTimeout(ticket)
+              }
+            }, defaultDelay)
+          })
+        },
+        cancel() {}
+      }
+    }
+  </script>
+</html>
