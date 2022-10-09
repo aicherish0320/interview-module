@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    const list = [
+      { id: 1, pid: 0, name: '部门a' },
+      { id: 2, pid: 1, name: '部门b' },
+      { id: 3, pid: 1, name: '部门c' },
+      { id: 4, pid: 2, name: '部门d' },
+      { id: 5, pid: 3, name: '部门e' },
+      { id: 6, pid: 2, name: '部门f' },
+      { id: 7, pid: 3, name: '部门g' },
+      { id: 8, pid: 4, name: '部门h' },
+      { id: 9, pid: 4, name: '部门i' },
+      { id: 10, pid: 0, name: '部门j' }
+    ]
+    // 循环
+    // const list2Tree = (arr, parentId) => {
+    //   function loop(parentId) {
+    //     let ret = []
+
+    //     for (let i = 0; i < arr.length; i++) {
+    //       let item = arr[i]
+    //       if (item.pid !== parentId) continue
+
+    //       item.children = loop(item.id)
+
+    //       ret.push(item)
+    //     }
+
+    //     return ret
+    //   }
+    //   return loop(parentId)
+    // }
+    // reduce
+    // const list2Tree = (arr, parentId) => {
+    //   function loop(parentId) {
+    //     return arr.reduce((acc, cur) => {
+    //       if (cur.pid === parentId) {
+    //         cur.children = loop(cur.id)
+    //         acc.push(cur)
+    //       }
+    //       return acc
+    //     }, [])
+    //   }
+    //   return loop(parentId)
+    // }
+    // console.log(JSON.stringify(list2Tree(list, 0)))
+
+    const tree = [
+      {
+        id: 1,
+        pid: 0,
+        name: '部门a',
+        children: [
+          {
+            id: 2,
+            pid: 1,
+            name: '部门b',
+            children: [
+              {
+                id: 4,
+                pid: 2,
+                name: '部门d',
+                children: [
+                  { id: 8, pid: 4, name: '部门h', children: [] },
+                  { id: 9, pid: 4, name: '部门i', children: [] }
+                ]
+              },
+              { id: 6, pid: 2, name: '部门f', children: [] }
+            ]
+          },
+          {
+            id: 3,
+            pid: 1,
+            name: '部门c',
+            children: [
+              { id: 5, pid: 3, name: '部门e', children: [] },
+              { id: 7, pid: 3, name: '部门g', children: [] }
+            ]
+          }
+        ]
+      },
+      { id: 10, pid: 0, name: '部门j', children: [] }
+    ]
+
+    const tree2Arr = (tree) => {
+      const stack = tree
+      const ret = []
+
+      while (stack.length) {
+        const node = stack.pop()
+        ret.push({
+          id: node.id,
+          pid: node.pid,
+          name: node.name
+        })
+        const children = node.children
+        if (children && children.length) {
+          children.forEach((child) => stack.push(child))
+        }
+      }
+
+      return ret
+    }
+
+    console.log(tree2Arr(tree))
+  </script>
+</html>
